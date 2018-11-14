@@ -5,7 +5,7 @@
 *&
 *&
 *&---------------------------------------------------------------------*
-REPORT zcoy_dyna_function.
+REPORT zcoy_dyna_function LINE-SIZE 130.
 
 TYPES:BEGIN OF ts_func_param,
         value TYPE string,
@@ -57,8 +57,10 @@ START-OF-SELECTION.
 *      lv_request = `[{"name":"DUMMY","value":""},{"name":"FUNCNAME","value":"\"TR_SYS_PARAMS\""},{"name":"NAMESPACE","value":null},{"name":"GROUP","value":null}]`.
 *      lv_funcname = 'OIL_MONTH_GET_FIRST_LAST'.
 *      lv_request = `[{"NAME":"I_MONTH","VALUE":"11"},{"NAME":"I_YEAR","VALUE":"2018"},{"NAME":"E_LAST_DAY","VALUE":null}]`.
-      lv_funcname = 'GET_CPU_ALL'.
-      lv_request = `[{"NAME":"LOCAL_REMOTE","VALUE":"\"LOCAL\""},{"NAME":"F_CPU_ALL_READ","VALUE":null},{"NAME":"TF_CPU_ALL","VALUE":null}]`.
+*      lv_funcname = 'GET_CPU_ALL'.
+*      lv_request = `[{"NAME":"LOCAL_REMOTE","VALUE":"\"LOCAL\""},{"NAME":"F_CPU_ALL_READ","VALUE":null},{"NAME":"TF_CPU_ALL","VALUE":null}]`.
+      lv_funcname = 'MD_STOCK_REQUIREMENTS_LIST_API'.
+      lv_request = `[{"NAME":"MATNR","VALUE":"\"000000000002000132\""},{"NAME":"WERKS","VALUE":"\"0781\""},{"NAME":"E_MT61D","VALUE":null},{"NAME":"MDPSX","VALUE":null}]`.
 
       /ui2/cl_json=>deserialize(
         EXPORTING
@@ -136,11 +138,11 @@ START-OF-SELECTION.
       ENDIF.
 
       LOOP AT lt_param ASSIGNING FIELD-SYMBOL(<fs_param>).
-        INSERT VALUE #( name = <fs_param>-name value = /ui2/cl_json=>serialize( data = <fs_param>-value ) ) INTO TABLE lt_output.
+        INSERT VALUE #( name = <fs_param>-name value = /ui2/cl_json=>serialize( data = <fs_param>-value numc_as_string = abap_true ) ) INTO TABLE lt_output.
       ENDLOOP.
 
-      DATA(lv_json) = /ui2/cl_json=>serialize( data = lt_output ). "numc_as_string = abap_true ).
-*  DATA(lv_excep) = /ui2/cl_json=>serialize( data = lt_excep ). "numc_as_string = abap_true ).
+      DATA(lv_json) = /ui2/cl_json=>serialize( data = lt_output numc_as_string = abap_true ).
+*  DATA(lv_excep) = /ui2/cl_json=>serialize( data = lt_excep numc_as_string = abap_true ).
 
     CATCH cx_root INTO DATA(lx).
   ENDTRY.
